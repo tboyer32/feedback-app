@@ -1,10 +1,21 @@
+//library to create a unique id
 import { v4 as uuidv4 } from "uuid";
+
+//browser router uses the HTML 5 history API - gives you a normal url like mysite.com/about
+//hash router uses the hash portion of the url to keep things in sync. With hash your URL would be mysite.com/#about, which isn't what we want
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+
 import { useState } from "react";
+
+import FeedbackData from "./data/FeedbackData";
+
 import Header from "./components/Header";
 import FeedbackList from "./components/FeedbackList";
-import FeedbackData from "./data/FeedbackData";
 import FeedbackStats from "./components/FeedbackStats";
 import FeedbackForm from "./components/FeedbackForm";
+import AboutIconLink from "./components/AboutIconLink";
+
+import AboutPage from "./pages/AboutPage";
 
 function App() {
     const [feedback, setFeedback] = useState(FeedbackData);
@@ -22,14 +33,23 @@ function App() {
     }
 
     return (
-        <>
+        <Router>
             <Header />
             <div className="container">
-                <FeedbackForm handleAdd={addFeedback} />
-                <FeedbackStats feedback={feedback} />
-                <FeedbackList feedback={feedback} handleDelete={deleteFeedback} />
+                <Routes>
+                    <Route exact path="/" element={
+                        <>
+                            <FeedbackForm handleAdd={addFeedback} />
+                            <FeedbackStats feedback={feedback} />
+                            <FeedbackList feedback={feedback} handleDelete={deleteFeedback} />
+                        </>
+                        } >
+                    </Route>
+                    <Route path="/about" element={<AboutPage />} />
+                </Routes>
+                <AboutIconLink />
             </div>
-        </>
+        </Router>
     );
 }
 
